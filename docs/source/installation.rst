@@ -7,7 +7,7 @@ If you use conda environments, I recommend first making a new conda environment:
 
 .. code-block:: bash
 
-   conda create -n Tiberius python=3.8
+   conda create -n Tiberius python=3.11
    conda activate Tiberius
 
 
