@@ -1,4 +1,5 @@
 .. _example_wasp94:
+
 Example: Fitting a Light Curve
 ==============================
 
@@ -27,6 +28,7 @@ The example's basic workflow is structured as follows:
 
 
 .. _DataPreparation:
+
 0. Data Preparation
 -------------------
 
@@ -50,10 +52,10 @@ Notes:
 - All arrays must be aligned by observation time and have the same length.
 - Optional files are only needed if GP modeling of correlated noise is used.
 
-.. _FolderStructure: 
+.. _FolderStructure:
 
 0.1 Example Folder Structure (Flexible)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 All required input files can be placed under any project folder structure that suits your workflow. 
@@ -87,7 +89,7 @@ Once you have a basic setup for your project folder and all your input data, in 
 .. _fittinginputtxt_:
 
 1.1 Edit fitting_input.txt
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 We start by copying the required input text files into the project folder:
@@ -306,7 +308,7 @@ These files contain the generated limb-darkening coefficients and the LDTk model
 .. _fittingParameters_:
 
 1.1.3 FITTING PARAMETERS
-------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In this section, we define the parameters that control the light curve fitting procedure and data preprocessing. 
 
@@ -384,7 +386,7 @@ Flux normalisation
 .. _PriorFile_:
 
 1.1.4 Prior File
-----------------
+^^^^^^^^^^^^^^^^^
 
 
 In the ``example_prior_def_file.txt``, the priors for all model parameters are defined. Parameters can either be fixed or treated as free. For free parameters, you can choose between a uniform prior (``prior_type = U``) or a Gaussian (normal) prior (``prior_type = N``). For a uniform prior, ``prior_1`` and ``prior_2`` define the lower and upper bounds of the parameter. For a Gaussian prior, ``prior_1`` corresponds to the mean value and ``prior_2`` to the standard deviation. These can be ignored for fixed values.
@@ -395,7 +397,7 @@ The example prior file used for the white-light curve fitting can be found in ``
 
 
 1.1.5 Systematics modelling
----------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 This section defines how instrumental systematics and correlated noise in the light curve are modelled.
 
 The input files (e.g. time, background, detector position) provide auxiliary variables that may correlate with non-astrophysical trends in the data. Tiberius uses these inputs to construct a model that separates astrophysical signal (the transit) from instrumental effects.
@@ -442,7 +444,7 @@ In this example, Gaussian Processes are not used. These inputs are therefore lef
 
 
 1.1.6 Sampling setup
---------------------
+^^^^^^^^^^^^^^^^^^^^^^
 
 Tiberius provides two sampling methods for parameter inference: **MCMC (emcee)** and **nested sampling (dynesty)**. The choice is defined via the ``sampling_method`` parameter.
 
@@ -453,6 +455,7 @@ Tiberius provides two sampling methods for parameter inference: **MCMC (emcee)**
 The selected method determines which set of additional parameters is used below. In this example, we will use 'dynasty'.
 
 .. code-block:: text
+
   sampling_method = dynesty
 
 
@@ -471,7 +474,7 @@ The configuration below controls the accuracy and efficiency of the nested sampl
   Convergence criterion for nested sampling. The run stops when the remaining uncertainty in the evidence falls below this threshold. Smaller values increase accuracy but require longer runtimes.
 
 1.1.7 Plotting and output
--------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The final options control plotting behaviour and the name of the output directory.
 
@@ -483,7 +486,7 @@ The final options control plotting behaviour and the name of the output director
     output_foldername = fitting_01
 
 1.3 First WL curve fit
-----------------------
+^^^^^^^^^^^^^^^^^^^^^^^
 
 Once everything is set up (input files and prior file), you can run the fitting from your project folder. The argument ``0`` tells the code that this is a white-light curve fit.
 
