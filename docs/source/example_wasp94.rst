@@ -1,5 +1,4 @@
-.. _example_wasp94:
-
+".. _example_wasp94:
 Example: Fitting a Light Curve
 ==============================
 
@@ -20,9 +19,7 @@ The example's basic workflow is structured as follows:
 
 1. :ref:`White-light curve fitting <WLFit>`  
    Fitting the integrated light curve to determine global system parameters.
-   1.1 :ref: edit fitting_input.txt
-   1.2 :ref: generate limb darkening coefficients with generate_LDCS.py
-   1.3 :ref: fit white light curve
+   
 
 2. :ref:`Spectroscopic fitting <SpectroscopicFit>`  
    Fitting individual wavelength bins using the white-light results as reference.
@@ -30,7 +27,6 @@ The example's basic workflow is structured as follows:
 
 
 .. _DataPreparation:
-
 0. Data Preparation
 -------------------
 
@@ -84,14 +80,14 @@ Notes:
 .. _WLFit:
 
 1. White-light curve fitting
---------------------------------
+----------------------------
 
 Once you have a basic setup for your project folder and all your input data, in the first stage we will perform a fit to the white-light curve. This stage is structured in different steps to determine the fitting parameters, including the limb-darkening coefficients in a substructured step before performing the WL light curve fit. There are several options for different models and sampling methods to use for the fit.
 
 .. _fittinginputtxt_:
 
 1.1 Edit fitting_input.txt
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 We start by copying the required input text files into the project folder:
@@ -108,7 +104,7 @@ It is important to note that this ``.txt`` file is required not only for the fit
 The workflow and inputs differ depending on whether you intend to run a fit for a white-light curve, which is the first step in the general workflow, or for spectroscopic light curves at a later stage. This section focuses on the inputs required for a white-light curve fit. For spectroscopic light curves, a few changes are noted in Section (TODO) (repeat for spectroscopic light curves).
 
 1.1.1 INPUT FILES
-^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^
 
 For the input files, you just need to provide the relative path to the ``fitting_input.txt`` file. The example structure is shown above (:ref:`example folder structure <FolderStructure>`), and the relative path according to that is shown in the example file.
 
@@ -144,7 +140,7 @@ In this example, the wavelength centre can be obtained directly from the ``white
 
 
 Choice of transit model
-""""""""""""""""""""""""
+"""""""""""""""""""""""
 
 .. code-block:: text
 
@@ -169,7 +165,7 @@ Several transit models are available. These differ in how the planet is geometri
 In this example, we will use Batman.
 
 1.1.2 LIMB DARKENING
-^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^
 
 This section of the ``fitting_input.txt`` defines the inputs related to limb darkening.
 
@@ -177,13 +173,14 @@ This section of the ``fitting_input.txt`` defines the inputs related to limb dar
 
 
 Limb darkening coefficients (LDCs)
-""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""
 
 Which law to use and packages to use is defined through the ``fitting_input.txt`` file but LCDs are generated separately using the ``generate_LDCs.py`` script prior to the first white-light fit. This corresponds to step 2 in the workflow overview.
 
 The LDC generation step is optional and controlled by a switch in the input file:
 
 .. code-block:: text
+
     generate_LDCs = 1 # do you want to generate LDCs? Set to 1 (on) or 0 (off).
 
 - If set to **0**: LDCs are not generated, and no additional limb darkening inputs are required in ``fitting_input.txt``.
@@ -322,7 +319,7 @@ The ``prior_filename`` specifies the path to the prior file, which contains all 
 
 
 Transit window definition
-""""""""""""""""""""""""
+"""""""""""""""""""""""""
 
 These parameters define the in-transit and out-of-transit regions of the light curve:
 
@@ -338,7 +335,7 @@ These parameters define the in-transit and out-of-transit regions of the light c
 These values are determined from the data, for example by plotting the white-light curve and identifying the ingress and egress points.
 
 Data clipping and selection
-""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""
 
 .. code-block:: text
 
@@ -350,7 +347,7 @@ Data clipping and selection
 
 
 Noise and outlier handling
-""""""""""""""""""""""""""""
+""""""""""""""""""""""""""
 
 .. code-block:: text
 
@@ -373,7 +370,7 @@ Noise and outlier handling
 
 
 Flux normalisation
-""""""""""""""""""""""
+""""""""""""""""""
 
 .. code-block:: text
 
@@ -398,7 +395,7 @@ The example prior file used for the white-light curve fitting can be found in ``
 
 
 1.1.5 Systematics modelling
------------------------------
+---------------------------
 This section defines how instrumental systematics and correlated noise in the light curve are modelled.
 
 The input files (e.g. time, background, detector position) provide auxiliary variables that may correlate with non-astrophysical trends in the data. Tiberius uses these inputs to construct a model that separates astrophysical signal (the transit) from instrumental effects.
@@ -445,7 +442,7 @@ In this example, Gaussian Processes are not used. These inputs are therefore lef
 
 
 1.1.6 Sampling setup
-----------------------
+--------------------
 
 Tiberius provides two sampling methods for parameter inference: **MCMC (emcee)** and **nested sampling (dynesty)**. The choice is defined via the ``sampling_method`` parameter.
 
@@ -474,7 +471,7 @@ The configuration below controls the accuracy and efficiency of the nested sampl
   Convergence criterion for nested sampling. The run stops when the remaining uncertainty in the evidence falls below this threshold. Smaller values increase accuracy but require longer runtimes.
 
 1.1.7 Plotting and output
-------------------------
+-------------------------
 
 The final options control plotting behaviour and the name of the output directory.
 
