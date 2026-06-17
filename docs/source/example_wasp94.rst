@@ -1,4 +1,4 @@
-".. _example_wasp94:
+.. _example_wasp94:
 Example: Fitting a Light Curve
 ==============================
 
