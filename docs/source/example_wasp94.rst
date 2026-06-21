@@ -15,14 +15,14 @@ This allows you to go through the fitting process without performing the reducti
 
 The example's basic workflow is structured as follows:
 
-0. :ref:`Data preparation <DataPreparation>`  
+0. :ref:`DataPreparation`  
    Understanding the input files and selecting the required data for the white-light fit.
 
-1. :ref:`White-light curve fitting <WLFit>`  
+1. :ref:`WLFit`  
    Fitting the integrated light curve to determine global system parameters.
    
 
-2. :ref:`Spectroscopic fitting <SpectroscopicFit>`  
+2. :ref:`SpectroscopicFit`  
    Fitting individual wavelength bins using the white-light results as reference.
 
 
@@ -41,9 +41,9 @@ Example data for WASP-94 can be found in:
 
 This directory contains many files, but for the first step of the workflow (fitting the white-light curve), we focus only on the following key files, which can be found in the dictionary WL, except for the first which is directly under input_files:
 
-- **``time_norm.pickle``** – Array of observation times.
-- **``white_light_flux.pickle``** – Array of normalized flux measurements.
-- **``white_light_error.pickle``** – Array of uncertainties for each flux measurement.
+- **time_norm.pickle** – Array of observation times.
+- **white_light_flux.pickle** – Array of normalized flux measurements.
+- **white_light_error.pickle** – Array of uncertainties for each flux measurement.
 
 
 Notes:
@@ -108,7 +108,7 @@ The workflow and inputs differ depending on whether you intend to run a fit for 
 1.1.1 INPUT FILES
 ^^^^^^^^^^^^^^^^^
 
-For the input files, you just need to provide the relative path to the ``fitting_input.txt`` file. The example structure is shown above (:ref:`example folder structure <FolderStructure>`), and the relative path according to that is shown in the example file.
+For the input files, you just need to provide the relative path to the ``fitting_input.txt`` file. The example structure is shown above (:ref:`FolderStructure`), and the relative path according to that is shown in the example file.
 
 .. code-block:: text
 
