@@ -21,7 +21,7 @@ To perform a fit, you will need to set up a project folder. This can have whatev
 
 Copy the entire `/wasp-94` directory so that it sits alongside the Tiberius source directory. This preserves the relative paths used throughout the example.
 
-For example:
+For example::
 
 parent_directory/
 ├── Tiberius/

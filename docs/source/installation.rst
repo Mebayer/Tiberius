@@ -1,7 +1,8 @@
+.. _installation:
+
 Installation
 ============
 
-.. _installation:
 
 If you use conda environments, I recommend first making a new conda environment:
 
