@@ -58,5 +58,8 @@ A dedicated Tiberius paper is in the pipeline.
    :caption: Contents:
 
    installation
+   quickstart
+   fitting
+   example_wasp94
    jwst
    api
