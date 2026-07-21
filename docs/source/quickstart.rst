@@ -22,7 +22,7 @@ To perform a fit, you will need to set up a project folder. This can have whatev
 Copy the entire `/wasp-94` directory so that it sits alongside the Tiberius source directory. This preserves the relative paths used throughout the example.
 
 For example::
-    
+
     parent_directory/
     ├── Tiberius/
     └── wasp-94/
@@ -75,9 +75,9 @@ Having created the LDCs, you can now perform the fit to the white light curve. T
 
 This simple example will produce the following output files:
 
-- `fitted_model_wb0001.png`: an image file showing the fitted model.
-- `example_prior_def_file_fitted_wb0001.txt`: a text file containing the now fitted values.
-- output directory `/fitting_example`(a name defined in the `fitting_input.txt`)
+- ``fitted_model_wb0001.png``: an image file showing the fitted model.
+- ``example_prior_def_file_fitted_wb0001.txt``: a text file containing the now fitted values.
+- output directory ```/fitting_example``(a name defined in the ``fitting_input.txt``)
     
 
 
