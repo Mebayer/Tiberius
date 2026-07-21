@@ -22,14 +22,15 @@ To perform a fit, you will need to set up a project folder. This can have whatev
 Copy the entire `/wasp-94` directory so that it sits alongside the Tiberius source directory. This preserves the relative paths used throughout the example.
 
 For example::
-
-parent_directory/
-├── Tiberius/
-└── wasp-94/
+    parent_directory/
+    ├── Tiberius/
+    └── wasp-94/
 
 .. code-block:: bash
+
     cd parent_directory
-    cp -r Tiberius/examples/wasp-94 .
+    cp -r Tiberius/examples/wasp-94 .   
+
 
 
 
@@ -41,6 +42,7 @@ This example uses observations of a transit of WASP-94b obtained with NTT/EFOSC2
 First, extract the archive using:
 
 .. code-block:: bash
+
     cd wasp-94/EFOSC2_20170814
     unzip input_files.zip 
 
@@ -52,6 +54,7 @@ This will contain the raw data files, which are in the form of arrays. For this 
 Now you should be ready to run Tiberius! The first step is to generate the limb darkening coefficients (LDCs) for the white light curve. This is done using the ``generate_LDCS.py`` script, which takes as input the stellar parameters and the instrument throughput. For this example, you can run:
 
 .. code-block:: bash
+
     python /path_to_your_TiberiusFolder/src/fitting_utils/generate_LDCS.py
     
 This will generate the LDCs for the white light curve and create the following two files as output in the directory:
@@ -62,6 +65,7 @@ This will generate the LDCs for the white light curve and create the following t
 Having created the LDCs, you can now perform the fit to the white light curve. This script takes as input the fitting parameters and options specified in the ``fitting_input.txt`` file, which is located in the same directory as the input files. You can run the fit using:
 
 .. code-block:: bash
+    
     python /path_to_your_TiberiusFolder/src/fitting_utils/light_curve_fit.py 0
 
 
