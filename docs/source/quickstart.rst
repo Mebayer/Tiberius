@@ -22,6 +22,7 @@ To perform a fit, you will need to set up a project folder. This can have whatev
 Copy the entire `/wasp-94` directory so that it sits alongside the Tiberius source directory. This preserves the relative paths used throughout the example.
 
 For example::
+    
     parent_directory/
     ├── Tiberius/
     └── wasp-94/
@@ -65,7 +66,7 @@ This will generate the LDCs for the white light curve and create the following t
 Having created the LDCs, you can now perform the fit to the white light curve. This script takes as input the fitting parameters and options specified in the ``fitting_input.txt`` file, which is located in the same directory as the input files. You can run the fit using:
 
 .. code-block:: bash
-    
+
     python /path_to_your_TiberiusFolder/src/fitting_utils/light_curve_fit.py 0
 
 
