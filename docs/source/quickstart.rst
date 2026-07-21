@@ -77,7 +77,7 @@ This simple example will produce the following output files:
 
 - ``fitted_model_wb0001.png``: an image file showing the fitted model.
 - ``example_prior_def_file_fitted_wb0001.txt``: a text file containing the now fitted values.
-- output directory ``/fitting_example``(a name defined in the ``fitting_input.txt``)
+- output directory ``/fitting_example`` (a name defined in the ``fitting_input.txt``)
     
 
 
