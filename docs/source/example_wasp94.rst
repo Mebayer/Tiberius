@@ -3,13 +3,13 @@
 Example: Fitting a Light Curve
 ==============================
 
-This tutorial provides a step-by-step example of how to perform light curve fitting with Tiberius. 
+This tutorial provides a step-by-step example of how to perform light curve fitting with Tiberius. For an overview of the general fitting workflow, see :ref:`fitting`. For a quickstart guide, see :ref:`quickstart`. This example uses the WASP-94 system as a case study, demonstrating the process of fitting a white-light curve and spectroscopic light curves.
 
 We will use transmission spectroscopy data from the WASP-94 system. The observations were taken with NTT/EFOSC2 on the night of 14 August 2017 and are available in the ESO archive. 
 
 If you want to follow the full data reduction procedure, refer to the data reduction documentation. Otherwise, you can directly use the example data provided in:
 
-    Tiberius/Example/WASP94/
+    Tiberius/examples/wasp-94/EFOSC2_20170814/input_files.zip
 
 This allows you to go through the fitting process without performing the reduction yourself.
 
@@ -37,9 +37,16 @@ Before fitting the light curve, we need to understand the structure of the examp
 
 Example data for WASP-94 can be found in:
 
-    Tiberius/Example/WASP94/input_files
+    Tiberius/examples/wasp-94/EFOSC2_20170814/
 
-This directory contains many files, but for the first step of the workflow (fitting the white-light curve), we focus only on the following key files, which can be found in the dictionary WL, except for the first which is directly under input_files:
+This directory contains:
+
+- **fitting_input.txt**: a template input file for the fitting procedure.
+- **example_prior_def_file.txt**: a template prior file defining the model parameters and their priors.
+- **input_files.zip**: a compressed archive containing the raw data files.
+
+
+The zip archive contains many files, but for the first step of the workflow (fitting the white-light curve), we focus only on the following key files, which can be found in the dictionary WL, except for the first which is directly under input_files:
 
 - **time_norm.pickle** – Array of observation times.
 - **white_light_flux.pickle** – Array of normalized flux measurements.
@@ -60,22 +67,21 @@ Notes:
 
 All required input files can be placed under any project folder structure that suits your workflow. 
 The following is a general example for the WASP-94 EFOSC2 dataset, which you can adapt as needed::
-    Tiberius/
-    data/                     
-    └── fitting/
-        └── wasp-94/
-            └── EFOSC2_20170814/
-                └── input_files/
-                    ├── time_norm.pickle
-                    └── WL/
-                        ├── white_light_flux.pickle
-                        ├── white_light_error.pickle
-                        ├── sky_norm.pickle
+
+    Tiberius/                     
+    wasp-94/
+      └── EFOSC2_20170814/
+        └── input_files/
+          ├── time_norm.pickle
+          └── WL/
+            ├── white_light_flux.pickle
+            ├── white_light_error.pickle
+            ├── sky_norm.pickle
                     
 
 Notes:
 
-- Optional files (``background.pickle``, ``x.pickle``, ``y.pickle``) are only needed if you plan to use Gaussian Process (GP) modeling for correlated noise.
+- Optional files are only needed if you plan to use Systematics modelling.
 - All ``.pickle`` files should have the same length and be aligned by observation time.
 - You can adapt this folder structure to fit your project organization; the pipeline will still work as long as paths are correctly specified in the configuration file.
 
@@ -86,7 +92,7 @@ Notes:
 
 Once you have a basic setup for your project folder and all your input data, in the first stage we will perform a fit to the white-light curve. This stage is structured in different steps to determine the fitting parameters, including the limb-darkening coefficients in a substructured step before performing the WL light curve fit. There are several options for different models and sampling methods to use for the fit.
 
-.. _fittinginputtxt_:
+.. _fittinginputtxt:
 
 1.1 Edit fitting_input.txt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -97,11 +103,11 @@ We start by copying the required input text files into the project folder:
 - ``fitting_input.txt``   
 - ``example_prior_def_file.txt``
 
-Both can be found in the folder ``Tiberius/src/fitting_utils`` in an empty format, which we will now go through and edit. The finished example for this stage can also be found in ``(TODO: Tiberius/Example/WASP94/)``.
+Both can be found in the folder ``Tiberius/src/fitting_utils`` in an empty format, which we will now go through and edit. The finished example for this stage can also be found in ``Tiberius/examples/wasp-94/EFOSC2_20170814/``.
 
-The file ``fitting_input.txt``  contains almost all of the inputs that need to be added or changed in order to run the first fitting attempt, and it includes well-described comments for each required input.
+The file ``fitting_input.txt`` contains almost all of the inputs that need to be added or changed in order to run the first fitting attempt, and it includes well-described comments for each required input.
 
-It is important to note that this ``.txt`` file is required not only for the fitting itself, but also for generating the limb-darkening coefficients (LDCs) before running the first light curve fit. This is also explained in the workflow. First, the ``fitting_input.txt`` needs to be set up.
+It is important to note that this ``.txt`` file is required not only for the fitting itself, but also for generating the limb-darkening coefficients (LDCs) before running the first light curve fit. This is also explained in the :ref:`workflow` . First, the ``fitting_input.txt`` needs to be set up.
 
 The workflow and inputs differ depending on whether you intend to run a fit for a white-light curve, which is the first step in the general workflow, or for spectroscopic light curves at a later stage. This section focuses on the inputs required for a white-light curve fit. For spectroscopic light curves, a few changes are noted in Section (TODO) (repeat for spectroscopic light curves).
 
@@ -177,7 +183,7 @@ This section of the ``fitting_input.txt`` defines the inputs related to limb dar
 Limb darkening coefficients (LDCs)
 """"""""""""""""""""""""""""""""""
 
-Which law to use and packages to use is defined through the ``fitting_input.txt`` file but LCDs are generated separately using the ``generate_LDCs.py`` script prior to the first white-light fit. This corresponds to step 2 in the workflow overview.
+Which law to use and packages to use is defined through the ``fitting_input.txt`` file but LCDs are generated separately using the ``generate_LDCs.py`` script prior to the first white-light fit. This corresponds to step 3 in the :ref:`workflow` overview.
 
 The LDC generation step is optional and controlled by a switch in the input file:
 
@@ -185,10 +191,10 @@ The LDC generation step is optional and controlled by a switch in the input file
 
     generate_LDCs = 1 # do you want to generate LDCs? Set to 1 (on) or 0 (off).
 
-- If set to **0**: LDCs are not generated, and no additional limb darkening inputs are required in ``fitting_input.txt``.
-- If set to **1**: LDCs are generated, and the corresponding inputs must be provided.
+- If set to **0**: LDCs are not generated, and no additional limb darkening inputs (for generating) are required in ``fitting_input.txt``.
+- If set to **1**: LDCs are generated (if the corresponding python scriptis run), and the corresponding inputs must be provided.
 
-In the latter case, the LDCs are computed before the main fitting procedure and are then used as fixed or prior inputs in the light curve fitting.
+In the latter case, the LDCs are computed before the main fitting procedure and are then used as fixed or prior inputs in the light curve fitting. The inputs for the generation of the LDCs are only used during the LDC generation step and are not required for the fitting itself. The LDCs are generated using the ``generate_LDCs.py`` script, which reads the inputs from ``fitting_input.txt`` and produces the necessary output files.
 
 In this workflow example, we first set up the ``fitting_input.txt`` file to generate the LDCs, followed by the white-light curve fitting step.
 
@@ -202,8 +208,8 @@ Two packages are currently supported for LDC computation:
     LDCs_package = LDTk # options: exotic-ld or LDTk
 
 
-- ExoTiC-LD
-- LDTk (Limb-Darkening Toolkit; Parviainen & Aigrain, 2015)
+- **ExoTiC-LD**: needs to be installed first (see ExoTiC-LD's `installation instructions <https://exotic-ld.readthedocs.io/en/latest/views/installation.html>`_), it supports spectroscopic (JWST, HST), photometric (Spitzer, TESS), and custom instrument modes. 
+- **LDTk** (Limb-Darkening Toolkit; Parviainen & Aigrain, 2015):needs the stellar parameters (Teff, logg, [Fe/H]) in the ``fitting_input.txt`` file, but no other addtional input.
 
 Both packages can be used to compute LDCs, depending on the chosen configuration. For this example, the LDTk option is used, since the specific instrument EFOSC2 is not available in ExoTiC-LD (and therefore the corresponding inputs for that package are not required in this example).
 
@@ -287,15 +293,31 @@ The final part of the limb-darkening inputs controls whether the generated LDCs 
     # use Kipping parameterisation for LDC sampling (1 = on, 0 = off)
     # NOTE: not fully tested
 
+.. note::
+
+   If either ``use_generated_ld = 1`` or ``use_generated_ld_as_prior = 1``, the
+   limb-darkening coefficients defined in the prior file are **overwritten** by
+   the values in ``LD_coefficients.txt``.
+
+   - Limb-darkening coefficients marked as ``free`` in the prior file are assigned
+     Gaussian priors centred on the generated values, with widths given by the
+     corresponding uncertainties in ``LD_coefficients.txt``.
+   - Limb-darkening coefficients marked as ``fixed`` are replaced with the
+     generated values and remain fixed during the fit.
+
+   If both ``use_generated_ld = 0`` and ``use_generated_ld_as_prior = 0``, the
+   limb-darkening coefficients and priors specified in the prior file are used
+   unchanged.
+
 If one intends to use LDCs, they must be generated, before running the first light curve fit. This can already be done at this stage using the edited ``fitting_input.txt``, even if some of the fitting parameters that follow have not yet been set, as they are not required for the LDC generation step.
 
 You can therefore generate the LDCs at this point using the current input file (this step can also be performed later, once all fitting parameters have been defined).
 
-To generate the LDCs, save the input file in your project folder and run ``generate_LDCs.py`` from this location:
+To generate the LDCs, save the input file in your project folder and run ``generate_LDCS.py``:
 
 .. code-block:: bash
 
-    python /path_to_your_TiberiusFolder/Tiberius/src/fitting_utils/generate_LDCs.py
+    python /path_to_your_TiberiusFolder/Tiberius/src/fitting_utils/generate_LDCS.py
 
 
 This will read the required inputs and produce the following output files:
@@ -303,7 +325,8 @@ This will read the required inputs and produce the following output files:
 - ``LD_coefficients.txt``
 - ``ldtk_model.pickle``
 
-These files contain the generated limb-darkening coefficients and the LDTk model used for their computation, respectively. The LDCs can then be used in the subsequent light curve fitting step.
+These files contain the generated limb-darkening coefficients and the LDTk model used for their computation, respectively. The LDCs can then be used in the subsequent light curve fitting step. 
+You can also define the limb-darkening coefficient (LDC) priors manually in the prior file. For example, you may first generate LDCs using the LDC generation tool, then copy the generated values into the prior file and specify any priors you wish. In this case, run the light-curve fitting with both ``use_generated_ld = 0`` and ``use_generated_ld_as_prior = 0`` so that the values and priors defined in the prior file are **not** overwritten.
 
 .. _fittingParameters_:
 
@@ -318,6 +341,17 @@ The ``prior_filename`` specifies the path to the prior file, which contains all 
 
     prior_filename = example_prior_def_file.txt
 
+.. _PriorFile_:
+
+Prior File
+""""""""""""
+
+
+In the ``example_prior_def_file.txt``, the priors for all model parameters are defined. Parameters can either be fixed or treated as free. For free parameters, you can choose between a uniform prior (``prior_type = U``) or a Gaussian (normal) prior (``prior_type = N``). For a uniform prior, ``prior_1`` and ``prior_2`` define the lower and upper bounds of the parameter. For a Gaussian prior, ``prior_1`` corresponds to the mean value and ``prior_2`` to the standard deviation. These can be ignored for fixed values.
+
+For this dataset, the priors were chosen based on the analysis presented in `Ahrer et al. (2022) <https://doi.org/10.1093/mnras/stab3805>`_, where the WASP-94Ab observations were originally published and analysed.
+
+The example prior file used for the white-light curve fitting can be found in ``example_prior_def_file_fitted_wasp94_WL.txt``. This file provides a complete set of priors consistent with the configuration used in this example.
 
 
 Transit window definition
@@ -383,20 +417,8 @@ Flux normalisation
 
 
 
-.. _PriorFile_:
 
-1.1.4 Prior File
-^^^^^^^^^^^^^^^^^
-
-
-In the ``example_prior_def_file.txt``, the priors for all model parameters are defined. Parameters can either be fixed or treated as free. For free parameters, you can choose between a uniform prior (``prior_type = U``) or a Gaussian (normal) prior (``prior_type = N``). For a uniform prior, ``prior_1`` and ``prior_2`` define the lower and upper bounds of the parameter. For a Gaussian prior, ``prior_1`` corresponds to the mean value and ``prior_2`` to the standard deviation. These can be ignored for fixed values.
-
-For this dataset, the priors were chosen based on the analysis presented in `Ahrer et al. (2022) <https://doi.org/10.1093/mnras/stab3805>`_, where the WASP-94Ab observations were originally published and analysed.
-
-The example prior file used for the white-light curve fitting can be found in ``example_prior_def_file_fitted_wasp94_WL.txt``. This file provides a complete set of priors consistent with the configuration used in this example.
-
-
-1.1.5 Systematics modelling
+1.1.4 Systematics modelling
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 This section defines how instrumental systematics and correlated noise in the light curve are modelled.
 
@@ -414,6 +436,9 @@ If ``model_input_files`` (for parametric modelling) and ``GP_model_input_files``
 
 If systematics are to be included, provide the paths to the corresponding input files, separated by commas. The behaviour of each input is then defined by the chosen configuration (e.g. polynomial orders, exponential ramps, or kernel classes). Multiple components can be used simultaneously by specifying them as comma-separated entries.
 
+.. note::
+  The ``prior`` file must also include the corresponding parameters for the systematics model. For example, if a polynomial of order 2 is used, the prior file should contain three parameters (one for each polynomial coefficient). If a GP model is used, the prior file should include the hyperparameters of the chosen kernel(s).
+
 In this example, the systematics are modelled using a low-order polynomial combined with the transit model to remove long-term trends in the light curve.
 
 For the white-light curve, a quadratic polynomial in time is used. This choice is implemented via the `polynomial_orders` parameter in the `fitting_input.txt` file:
@@ -421,7 +446,7 @@ For the white-light curve, a quadratic polynomial in time is used. This choice i
 .. code-block:: text
 
     model_input_files = input_files/time_norm.pickle
-    normalise_inputs = 1
+    normalise_inputs = 0
 
     polynomial_orders = 2
 
@@ -468,7 +493,7 @@ The configuration below controls the accuracy and efficiency of the nested sampl
 
 - **nlive_points_pdim** : 
   Number of live points per model parameter. The total number of live points is given by  
-  `nlive_points_pdim × number of fitted parameters`. Higher values improve accuracy but increase computation time.
+  ``nlive_points_pdim × number of fitted parameters``. Higher values improve accuracy but increase computation time.
 
 - **precision_crit**:  
   Convergence criterion for nested sampling. The run stops when the remaining uncertainty in the evidence falls below this threshold. Smaller values increase accuracy but require longer runtimes.
