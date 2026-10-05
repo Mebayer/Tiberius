@@ -529,3 +529,58 @@ The results are stored in the output folder specified in ``fitting_input.txt``. 
 - Pickle files containing the input data, posterior samples, and fitted models  
 
 In addition, a copy of the prior file and an image of the fitted model are automatically created. These are saved in the project folder (not in the output folder).
+
+
+2. Spectroscopic light curve fitting
+-------------------------------------
+
+After a good fit for the white-light curve has been found, the individual wavelength bins can be fitted using the results of the white-light curve fit as a reference. The workflow for the spectroscopic light curve fitting is similar to the white-light curve fitting, but with some differences in the input files and parameters.
+
+For the input files, the spectroscopic flux and error arrays are used instead of the white-light flux and error arrays. The wavelength centres and bin widths for each spectroscopic bin must also be specified.
+
+.. code-block:: text
+
+    # Light curve inputs
+
+    time_file = input_files/time_norm.pickle  # pickled numpy array of times
+
+    flux_file = input_files/wvl_bins/fluxes_individual_wvl_solutions.pickle
+
+    # pickled numpy array of fluxes
+    # white-light: shape (1,)
+    # spectroscopic: shape (nbins, nfluxes)
+
+    error_file = input_files/wvl_bins/errors_individual_wvl_solutions.pickle
+
+    # pickled numpy array of errors
+    # white-light: shape (1,)
+    # spectroscopic: shape (nbins, nfluxes)
+
+    wvl_centres = input_files/wvl_bins/wvl_bin_centres_individual_wvl_solutions.pickle
+
+    # either a single number (in case of white-light curve) OR a pickled numpy array of wavelength bin centres.
+
+    wvl_bin_full_width = input_files/wvl_bins/wvl_bin_full_widths_individual_wvl_solutions.pickle
+
+    # either a single number (in case of white-light curve) OR a pickled numpy array of wavelength bin widths.
+
+
+The second part that differs from the white-light curve fitting is that the prior file for the spectroscopic light curve fitting should be adapted to include the best-fit parameters from the white-light curve fit. This allows the spectroscopic fits to be informed by the global system parameters determined from the white-light analysis.
+
+The output prior file created during the white-light curve fitting can be used as a starting point for the spectroscopic fits.
+
+.. code-block:: text
+
+    ### FITTING PARAMETERS
+
+    prior_filename = example_prior_def_file_fitted_wb0001.txt
+
+The time of mid-transit (``t0``), the inclination (``i``) of the planet's orbit, and the ratio of the semi-major axis to the stellar radius (``a/R*``) are already fixed to the best-fit results from the white-light curve fit.
+
+The spectroscopic light curve fitting can then be run in a similar manner to the white-light curve fitting, using the same fitting script but with the argument ``1, 2, ...`` to indicate that this is a spectroscopic fit. The argument corresponds to the index of the wavelength bin being fitted.
+
+.. code-block:: bash
+
+    python /path_to_your_TiberiusFolder/Tiberius/src/fitting_utils/light_curve_fit.py 1
+
+The index is also incremented by 1 when generating the output filename. Therefore, the white-light curve fit with argument ``0`` has a filename ending in ``1``, while the first wavelength bin, fitted with argument ``1``, has a filename ending in ``2``, and so on. This is important to keep in mind when running multiple spectroscopic fits in sequence.
